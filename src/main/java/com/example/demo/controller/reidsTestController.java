@@ -48,10 +48,12 @@ public class reidsTestController {
                         count++;
                         System.out.println(count);
                     }
-                    redisLockService.unlock(lockName);
+                    //redisLockService.unlock(lockName);  //业务代码要是报错了这里就不能释放锁  会导致一直加锁失败  所以在finally里面释放
                     semaphore.release();
                 } catch (InterruptedException e) {
                     log.error("exception:" ,e);
+                }finally {
+                    redisLockService.unlock(lockName);
                 }
 
                 //每个线程执行后 调用一下countkdown方法
